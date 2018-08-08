@@ -1,0 +1,27 @@
+<div *ngIf="task">
+  <div><span>⚜ id: </span>{{task.id}}</div>
+  <div>
+    <label>name:
+      <input [(ngModel)]="task.name" placeholder="name">
+    </label>
+  </div>
+  <div>
+    <label>days:
+      <input [(ngModel)]="task.days " placeholder="days" type="number">
+    </label>
+  </div>
+  <div>
+    <label>next time:
+      <input [ngModel]="task.next | date: 'yyyy-MM-dd'" type="date" placeholder="next time">
+    </label>
+  </div>
+  <div>
+    <label>done today:
+      <input type="checkbox" [checked]="task.done">
+    </label>
+  </div>
+  <button>save and go back</button>
+  <button (click)="goBack()">just go back</button>
+  <button>save and stay</button>
+</div>
+

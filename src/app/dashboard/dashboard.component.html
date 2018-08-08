@@ -1,0 +1,16 @@
+<h3>Top Tasks</h3>
+<div class="grid grid-pad">
+  <a routerLink="/detail">add new task</a>
+  <button (click)="addTask()">add new task</button>
+  <p>Today:</p>
+  <app-tasks [tasks]=today></app-tasks>
+  <p>Overdue:</p>
+  <app-tasks [tasks]=overdue></app-tasks>
+  <p>Tomorrow:</p>
+  <app-tasks [tasks]=tomorrow></app-tasks>
+  <p>Next week:</p>
+  <app-tasks [tasks]=nextWeek></app-tasks>
+  <p>Others:</p>
+  <app-tasks [tasks]=others></app-tasks>
+
+</div>
