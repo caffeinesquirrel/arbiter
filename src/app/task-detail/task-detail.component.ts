@@ -12,6 +12,7 @@ import { Location } from '@angular/common';
 export class TaskDetailComponent implements OnInit {
   @Input() task: Task;
   newTask = false;
+  nextDate = new Date();
 
   constructor(
     private route: ActivatedRoute,
@@ -25,10 +26,13 @@ export class TaskDetailComponent implements OnInit {
 
   getTask(): void {
     const id = +this.route.snapshot.paramMap.get('id');
-
+    
     if (id) {
       this.taskService.getTask(id)
-        .subscribe(task => this.task = task);
+        .subscribe((task) => {
+          this.task = task;
+          this.nextDate = new Date(task.next);
+        });
     } else {
       this.newTask = true;
       this.task = new Task();
@@ -38,4 +42,17 @@ export class TaskDetailComponent implements OnInit {
   goBack(): void {
     this.location.back();
   }
+
+  save(): void {
+    if (this.newTask) {
+      this.taskService.addTask(this.task, this.nextDate.getTime());
+    } else {
+      this.taskService.updateTask(this.task, this.nextDate.getTime());
+    }
+  }
+
+  saveAndBack(): void {
+    this.save();
+    this.goBack();
+  } 
 }

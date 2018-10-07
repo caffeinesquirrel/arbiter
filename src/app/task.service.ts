@@ -34,4 +34,20 @@ export class TaskService {
 
     this.tasks$.next(TASKS);
   }
+
+  addTask(task: Task, next: number): void {
+    TASKS.push({
+      id: Date.now(),
+      name: task.name,
+      days: task.days, 
+      next,
+    });
+  }
+
+  updateTask(task: Task, next: number): void {
+    const el = TASKS.find(task => task.id === task.id);
+    el.name = task.name;
+    el.days = task.days;
+    el.next = next;
+  }
 }

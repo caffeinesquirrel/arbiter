@@ -12,7 +12,7 @@
   </div>
   <div>
     <label>next time:
-      <input [ngModel]="task.next | date: 'yyyy-MM-dd'" type="date" placeholder="next time">
+      <input type="date" [value]="nextDate | date:'yyyy-MM-dd'" (input)="nextDate=$event.target.valueAsDate" />
     </label>
   </div>
   <div>
@@ -20,8 +20,8 @@
       <input type="checkbox" [checked]="task.done">
     </label>
   </div>
-  <button>save and go back</button>
+  <button (click)=saveAndBack()>save and go back</button>
   <button (click)="goBack()">just go back</button>
-  <button>save and stay</button>
+  <button (click)="save()">save and stay</button>
 </div>
 
