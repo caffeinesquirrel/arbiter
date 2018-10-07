@@ -3,6 +3,7 @@ import { Task } from '../task';
 import { ActivatedRoute } from '@angular/router';
 import { TaskService } from '../task.service';
 import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-task-detail',
@@ -17,7 +18,8 @@ export class TaskDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private taskService: TaskService,
-    private location: Location
+    private location: Location,
+    public router: Router,
   ) { }
 
   ngOnInit(): void {
@@ -55,4 +57,9 @@ export class TaskDetailComponent implements OnInit {
     this.save();
     this.goBack();
   } 
+
+  delete(): void {
+    this.taskService.deleteTask(this.task.id);
+    this.router.navigate([`/dashboard`]);
+  }
 }

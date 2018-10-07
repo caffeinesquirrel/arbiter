@@ -50,4 +50,10 @@ export class TaskService {
     el.days = task.days;
     el.next = next;
   }
+
+  deleteTask(id: number): void {
+    const el = TASKS.find(task => task.id === id);
+    const index = TASKS.indexOf(el);
+    TASKS.splice(index, 1);
+  }
 }
