@@ -20,21 +20,20 @@ export class TaskDetailComponent implements OnInit {
     private taskService: TaskService,
     private location: Location,
     public router: Router,
-  ) { }
+  ) { 
+  }
 
   ngOnInit(): void {
     this.getTask();
   }
 
   getTask(): void {
-    const id = +this.route.snapshot.paramMap.get('id');
-    
+    const id = +this.route.snapshot.paramMap.get('id');  
     if (id) {
-      this.taskService.getTask(id)
-        .subscribe((task) => {
-          this.task = task;
-          this.nextDate = new Date(task.next);
-        });
+      this.taskService.data$.subscribe(data => {
+        this.task = data.tasks.find(task => task.id === id);
+        this.nextDate = this.task && new Date(this.task.next);
+      })
     } else {
       this.newTask = true;
       this.task = new Task();
@@ -47,9 +46,17 @@ export class TaskDetailComponent implements OnInit {
 
   save(): void {
     if (this.newTask) {
-      this.taskService.addTask(this.task, this.nextDate.getTime());
+      this.taskService.addTask({
+        id: Date.now(),
+        name: this.task.name,
+        days: this.task.days, 
+        next: this.nextDate.getTime(),
+      });
     } else {
-      this.taskService.updateTask(this.task, this.nextDate.getTime());
+      this.taskService.updateTask({
+        ...this.task, 
+        next: this.nextDate.getTime(),
+      });
     }
   }
 
@@ -59,7 +66,7 @@ export class TaskDetailComponent implements OnInit {
   } 
 
   delete(): void {
-    this.taskService.deleteTask(this.task.id);
+    this.taskService.removeTask(this.task.id);
     this.router.navigate([`/dashboard`]);
   }
 }

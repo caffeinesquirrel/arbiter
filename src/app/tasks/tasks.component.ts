@@ -18,6 +18,7 @@ export class TasksComponent implements OnInit {
               private taskService: TaskService) { }
 
   ngOnInit() {
+    console.log('tasks', this.tasks);
   }
 
   addTask() {
