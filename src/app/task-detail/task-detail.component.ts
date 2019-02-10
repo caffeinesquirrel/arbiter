@@ -32,7 +32,7 @@ export class TaskDetailComponent implements OnInit {
     if (id) {
       this.taskService.data$.subscribe(data => {
         this.task = data.tasks.find(task => task.id === id);
-        this.nextDate = this.task && new Date(this.task.next);
+        this.nextDate = this.task && new Date(this.task.next[this.task.next.length-1]);
       })
     } else {
       this.newTask = true;
@@ -46,16 +46,19 @@ export class TaskDetailComponent implements OnInit {
 
   save(): void {
     if (this.newTask) {
+      const next = [];
+      next.push(this.nextDate.getTime());
       this.taskService.addTask({
         id: Date.now(),
         name: this.task.name,
         days: this.task.days, 
-        next: this.nextDate.getTime(),
+        next,
       });
     } else {
+      this.task.next.push(this.nextDate.getTime());
       this.taskService.updateTask({
         ...this.task, 
-        next: this.nextDate.getTime(),
+        next: this.task.next,
       });
     }
   }

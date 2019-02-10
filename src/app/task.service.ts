@@ -44,6 +44,7 @@ export class TaskService {
     .then(data => {
       this._data = data,
       this._data$.next(this._data)
+      console.log('data', this._data);
       return this._data
     })
   }
@@ -76,11 +77,6 @@ export class TaskService {
   }
 
   updateTask(task: Task): Promise<AppData>  {
-    // const el = TASKS.find(task => task.id === task.id);
-    // el.name = task.name;
-    // el.days = task.days;
-    // el.next = next;
-
     return this.loadData()
     .then(data => ({
       ...data,
@@ -99,11 +95,23 @@ export class TaskService {
     .then(data => this.saveData(data))
   }
 
-  doneTask(id: number): void {
-    const currentTask = this._data.tasks.find(task => task.id === id);
-    currentTask.next = +addDays(Date.now(), currentTask.days);
-    currentTask.done = Date.now();
-
-    this._data$.next(this._data);
+  doneTask(id: number): Promise<AppData> {
+    return this.loadData()
+    .then(data => ({
+      ...data,
+      tasks: data.tasks.map(item => {
+        if (item.id === id) {
+          item.next.push(+addDays(Date.now(), item.days));
+          return {
+            ...item,
+            next: item.next, 
+            done: Date.now(),
+          }
+        } else {
+          return item;
+        }
+      }),
+    }))
+    .then(data => this.saveData(data));
   }
 }

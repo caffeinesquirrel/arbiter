@@ -25,12 +25,12 @@ export class DashboardComponent {
 
   getTasks(tasks: Task[]): void {
     const nextWeek = endOfDay(addWeeks(Date.now(), 1));
-    this.today = tasks.filter( task => isToday(task.next));
-    this.overdue = tasks.filter( task => new Date(task.next) < startOfToday());
-    this.tomorrow = tasks.filter( task => isTomorrow(task.next));
+    this.today = tasks.filter( task => isToday(task.next[(task.next.length-1)]));
+    this.overdue = tasks.filter( task => new Date(task.next[(task.next.length-1)]) < startOfToday());
+    this.tomorrow = tasks.filter( task => isTomorrow(task.next[(task.next.length-1)]));
     this.nextWeek = tasks
-      .filter( task => new Date(task.next) > endOfTomorrow() && new Date(task.next) <= nextWeek);
-    this.others =  tasks.filter( task => new Date(task.next) > nextWeek);
-
+      .filter( task => new Date(task.next[(task.next.length-1)]) > endOfTomorrow() 
+                    && new Date(task.next[(task.next.length-1)]) <= nextWeek);
+    this.others =  tasks.filter( task => new Date(task.next[(task.next.length-1)]) > nextWeek);
   }
 }
