@@ -17,7 +17,7 @@
   </div>
   <div>
     <label>done today:
-      <input type="checkbox" [checked]="task.done">
+      <input type="checkbox" [checked]="checkDone()" (change)="onDoneChange()">
     </label>
   </div>
   <button (click)=saveAndBack()>save and go back</button>
