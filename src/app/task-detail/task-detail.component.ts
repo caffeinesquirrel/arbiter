@@ -15,6 +15,8 @@ export class TaskDetailComponent implements OnInit {
   @Input() task: Task;
   newTask = false;
   nextDate = new Date();
+  today = false;
+  days:number;
   
   constructor(
     private route: ActivatedRoute,
@@ -33,7 +35,12 @@ export class TaskDetailComponent implements OnInit {
     if (id) {
       this.taskService.data$.subscribe(data => {
         this.task = data.tasks.find(task => task.id === id);
-        this.nextDate = this.task && new Date(this.task.next[this.task.next.length-1]);
+        if (this.task) {
+          this.nextDate = this.task.plan && new Date(this.task.plan[this.task.plan.length-1]);
+          this.today = this.task.fact && isToday(this.task.fact[this.task.fact.length-1]);
+          this.days = this.task.days;
+        }
+      
       })
     } else {
       this.newTask = true;
@@ -46,22 +53,48 @@ export class TaskDetailComponent implements OnInit {
   }
 
   save(): void {
+    const nextToSave = this.nextDate.setHours(0,0,0);
+
     if (this.newTask) {
-      const next = [];
-      next.push(this.nextDate.getTime());
+      const plan = [];
+      plan.push(nextToSave);
+
+      const fact = [];
+      if (this.today) {
+        fact.push(new Date().setHours(0,0,0)); // do I need here 0 0 0 
+      }
+
       this.taskService.addTask({
         id: Date.now(),
         name: this.task.name,
-        days: this.task.days, 
-        next,
+        days: this.days, 
+        plan,
+        fact,
       });
     } else {
-      const newDate = this.nextDate.setHours(0,0,0);
-      const lastNext = this.task.next[(this.task.next.length - 1)]; 
-      // this.task.next.push(this.nextDate.setHours(0,0,0));
+      // plan 
+      const oldDays = this.task.days === this.days;
+      let plan = [];
+      if (nextToSave > this.task.plan[this.task.plan.length-1] && oldDays) {
+        plan.push(this.task.plan[this.task.plan.length-1]);
+        plan.push(nextToSave);
+      } else {
+        plan.push(nextToSave);
+      }
+
+      // fact
+      let fact = this.task.fact;
+      if (this.today) {
+        fact.push(new Date().setHours(0,0,0)); // do I need here 0 0 0 
+      } else if (!this.today && fact && isToday(fact[fact.length-1])) {
+        fact.pop();
+      }
+
       this.taskService.updateTask({
         ...this.task, 
-        next: this.task.next,
+        days: this.days,
+        fact,
+        plan,
       });
     }
   }

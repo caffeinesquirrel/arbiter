@@ -3,7 +3,7 @@
     <input type="checkbox" (change)="taskDone(task)" [checked]="checkDone(task)" [disabled]="checkDone(task)">
     <a routerLink="/detail/{{task.id}}">
       <span class="icon">{{task.days}}</span> {{task.name}}
-      <span>{{task.next[(task.next.length-1)] | date:'dd.MM.yy' }}></span>
+      <span>[{{task.plan[(task.plan.length-1)] | date:'dd.MM.yy' }}]</span>
     </a>
   </li>
 </ul>

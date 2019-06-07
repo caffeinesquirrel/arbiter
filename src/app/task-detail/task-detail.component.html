@@ -7,7 +7,7 @@
   </div>
   <div>
     <label>days:
-      <input [(ngModel)]="task.days " placeholder="days" type="number">
+      <input [(ngModel)]="days " placeholder="days" type="number">
     </label>
   </div>
   <div>
@@ -18,6 +18,11 @@
   <div>
     <label>done today:
       <input type="checkbox" [checked]="checkDone()" (change)="onDoneChange()">
+    </label>
+  </div>
+  <div>
+    <label>done new today:
+      <input type="checkbox" [(ngModel)]="today">
     </label>
   </div>
   <button (click)=saveAndBack()>save and go back</button>

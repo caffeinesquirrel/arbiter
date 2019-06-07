@@ -100,10 +100,15 @@ export class TaskService {
       ...data,
       tasks: data.tasks.map(item => {
         if (item.id === id) {
-          item.next.push(+addDays(Date.now(), item.days));
+          if (item.plan.length === 2) {
+            item.plan.shift();
+          }
+          item.plan.push(+addDays(Date.now(), item.days));
+          item.fact.push(Date.now());
           return {
             ...item,
-            next: item.next, 
+            plan: item.plan, 
+            fact: item.fact,
             done: Date.now(),
           }
         } else {

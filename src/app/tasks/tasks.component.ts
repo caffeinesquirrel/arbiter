@@ -35,6 +35,6 @@ export class TasksComponent implements OnInit {
   }
   
   checkDone(task: any): Boolean {
-    return isToday(task.done);
+    return isToday(task.fact[task.fact.length - 1]);
   }
 }
