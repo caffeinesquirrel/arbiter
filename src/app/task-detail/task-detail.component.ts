@@ -53,7 +53,7 @@ export class TaskDetailComponent implements OnInit {
   }
 
   save(): void {
-    const nextToSave = this.nextDate.setHours(0,0,0);
+    const nextToSave = this.nextDate.setHours(0,0,0,0);
 
     if (this.newTask) {
       const plan = [];
@@ -61,7 +61,7 @@ export class TaskDetailComponent implements OnInit {
 
       const fact = [];
       if (this.today) {
-        fact.push(new Date().setHours(0,0,0)); // do I need here 0 0 0 
+        fact.push(new Date().setHours(0,0,0,0)); // do I need here 0 0 0 
       }
 
       this.taskService.addTask({
@@ -85,7 +85,7 @@ export class TaskDetailComponent implements OnInit {
       // fact
       let fact = this.task.fact;
       if (this.today) {
-        fact.push(new Date().setHours(0,0,0)); // do I need here 0 0 0 
+        fact.push(new Date().setHours(0,0,0,0)); // do I need here 0 0 0 
       } else if (!this.today && fact && isToday(fact[fact.length-1])) {
         fact.pop();
       }
@@ -109,18 +109,6 @@ export class TaskDetailComponent implements OnInit {
     this.router.navigate([`/dashboard`]);
   }
 
-  onDoneChange(): void {
-    if (isToday(this.task.done)) {
-      console.log('was true');
-      this.task.done = 0;
-      this.unDoneTask();
-    } else {
-      console.log('false');
-      this.task.done = new Date().setHours(0,0,0);
-      this.doneTask();
-    }
-  }
-
   unDoneTask(): void {
     const countOfNext = this.task.next.length;
     if (!this.newTask || countOfNext > 1) {
@@ -136,7 +124,21 @@ export class TaskDetailComponent implements OnInit {
     }
   }
 
-  checkDone(): Boolean {
-    return isToday(this.task.done);
+  onDaysChange(): void {
+    if (this.today) {
+      this.nextDate = addDays(Date.now(), this.days);
+    } else {
+      const oldNext = new Date(this.task.plan[this.task.plan.length-1]);
+      const newDays = this.days - this.task.days; 
+      this.nextDate = addDays(oldNext, newDays);
+    }
+  }
+
+  onTodayChange(): void {
+    if (this.today) {
+      this.nextDate = addDays(Date.now(), this.days);
+    } else if (this.task.plan.length > 1) {
+      this.nextDate = new Date(this.task.plan[0]);
+    }
   }
 }

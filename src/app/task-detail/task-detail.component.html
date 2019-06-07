@@ -7,22 +7,17 @@
   </div>
   <div>
     <label>days:
-      <input [(ngModel)]="days " placeholder="days" type="number">
+      <input [(ngModel)]="days" placeholder="days" type="number" (change)="onDaysChange()">
+    </label>
+  </div>
+  <div>
+    <label>done today:
+      <input type="checkbox" [(ngModel)]="today" (change)="onTodayChange()">
     </label>
   </div>
   <div>
     <label>next time:
       <input type="date" [value]="nextDate | date:'yyyy-MM-dd'" (input)="nextDate=$event.target.valueAsDate" />
-    </label>
-  </div>
-  <div>
-    <label>done today:
-      <input type="checkbox" [checked]="checkDone()" (change)="onDoneChange()">
-    </label>
-  </div>
-  <div>
-    <label>done new today:
-      <input type="checkbox" [(ngModel)]="today">
     </label>
   </div>
   <button (click)=saveAndBack()>save and go back</button>
